@@ -1,0 +1,8 @@
+.karuken {
+        margin: 10vh auto;
+        font-family: 'Architects Daughter', cursive;
+        font-size: calc(40px + 2vw);
+        margin: auto;
+        position: relative;
+        text-align: center;
+}

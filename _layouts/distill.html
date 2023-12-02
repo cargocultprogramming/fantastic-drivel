@@ -97,7 +97,9 @@
         <d-citation-list></d-citation-list>
       </d-appendix>
 
-      <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}"></d-bibliography>
+      {%- if site.bibliography -%}
+        <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}"></d-bibliography>
+      {%- endif -%}
 
       {%- if site.disqus_shortname and page.disqus_comments -%}
         {% include disqus.html %}
