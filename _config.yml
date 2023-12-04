@@ -189,6 +189,7 @@ markdown: kramdown
 highlighter: rouge
 kramdown:
   input: GFM
+  auto_ids: true
   syntax_highlighter_opts:
     css_class: 'highlight'
     span:
