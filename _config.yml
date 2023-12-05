@@ -3,14 +3,14 @@
 # -----------------------------------------------------------------------------
 
 title: karuken # the website title (if blank, full name will be used instead)
-first_name: I
-middle_name: M
+first_name:
+middle_name:
 last_name: cargocultprg
 email: mluisser@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Just another blog - more of a gist collection really, might be useful though.
-footer_text: >
-  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
+# footer_text: >
+#   powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> and <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme | 
 keywords: jekyll, python, django # add your own keywords or leave empty
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
@@ -19,7 +19,7 @@ icon: 🐙 # the emoji used as the favicon (alternatively, provide image name in
 url: https://drivel.karuken.quest # the base hostname & protocol for your site
 baseurl: # the subpath of your site, e.g. /blog/
 last_updated: true # set to true if you want to display last updated in the footer
-impressum_path:  # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
+impressum_path: /_pages/imprint.html # set to path to include impressum link in the footer, use the same path as permalink in a page, helps to conform with EU GDPR
 
 # -----------------------------------------------------------------------------
 # Theme
