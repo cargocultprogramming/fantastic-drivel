@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Creative commons letter icons
+title: Creative commons font icons
 description: Include creative commons symbols as unicode icons in your website
 tags: jekyll css
 categories: 
