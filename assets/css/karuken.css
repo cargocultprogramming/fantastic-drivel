@@ -8,6 +8,15 @@
         min-width: max-content;
 }
 
+.karuken-header {
+        font-family: 'Architects Daughter', cursive;
+        font-size: calc(8px + 0.2vw);
+        position: relative;
+        text-align: center;
+        min-width: max-content;
+        max-width: max-content;
+}
+
 @font-face {
   font-display: swap;
   font-family: CCSymbols;
