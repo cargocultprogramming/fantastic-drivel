@@ -29,7 +29,7 @@ TODO: important options
 : Ignores all existing files, but will update the destination with any new files that exist at the origin. This does not ignore directories.
 
 `--filter 'this'`
-: Filters out expressions that will not be synchronized from origin to destination. For example directories or files - also regular expressions are possible. For multiple strings just use the filter option repeatedly.
+: Filters out expressions that will not be synchronized from origin to destination. For example directories or files - also regular expressions are possible. For multiple strings just use the filter option repeatedly. Filters can be quite complex - details can be found in the "Filter Rules" section of the manpage. Most common usage: to exclude a pattern: `--filter '- pattern'`. It's even possible to make the contents of a gitignore file part of a filter: `--filter ':- .gitignore'`. This will merge the contents of the gitignore file into the filter rules including any `.gitignore` files found in any subdirectory of the origin directory tree.
 
 + `-avz`
 
