@@ -16,7 +16,7 @@ SaaS Pegasus is a pretty good starting point for a django project that will come
 
 However some finer points regarding configuration choices are a bit hidden in the docs and additionally I prefer to use a bit of a different setup in some details (python poetry). For example the pegasus docs don't cover setting up your environment (nvm, npm, python, ...) in depth. These 'small' things can easily send an unexperienced dev down a rabbit hole of 'use npm to add npm to your project', resulting in hours of research, while actually a clean, well compartmentalized setup can be done in 20 minutes. So here are my notes for exactly that purpose.
 
-So these notes are most likely only useful for you, if you have bought access to SaaS Pegasus and want to, for example use `python poetry` to manage the environment instead of `venv` which is covered in the official docs. 
+So these notes are most likely only useful for you, if you have bought access to SaaS Pegasus and want to, for example use `python poetry` to manage the environment instead of `venv` which is covered in the official docs.
 
 ## Initialization from pegasus
 
@@ -97,7 +97,6 @@ cat requirements/dev-requirements.in | grep -v '\-c '| sed 's/\s#.*//' | xargs p
 cat requirements/prod-requirements.in | grep -v '\-c '| sed 's/\s#.*//' | xargs poetry add --group production
 ```
 
-
 Lastly, to select the correct virtual environment in visual studio code, select `Python: Select Interpreter` from the command palette (Shift-Ctrl-P) and pick `./.venv` from the list.
 
 ### Setting up a `webpack` workflow
@@ -136,7 +135,7 @@ nvm install node
 which npm  # will point to ~/.nvm/versions/...
 ```
 
-Once this is done, change *into the project directory* and run
+Once this is done, change _into the project directory_ and run
 
 ```bash
 npm install
