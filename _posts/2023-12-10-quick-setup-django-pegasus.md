@@ -8,13 +8,13 @@ tags: django python
 categories: 
 featured: true
 ---
-[SaaS Pegasus](https://www.saaspegasus.com/projects/) is a configurable (commercial) template for django. There is good [official documentation](https://docs.saaspegasus.com/) available from the software author.
+[SaaS Pegasus](https://www.saaspegasus.com/projects/) is a configurable (commercial) template for django. There is very good [official documentation](https://docs.saaspegasus.com/) available from the software author.
 
 The author also provides great [guides on how the use django in a modern webstack](https://www.saaspegasus.com/guides/) with a plethora of backend and frontend options from APIs over django core functionality to modern frontends like react, vue or htmx. I highly recommend to read through the guides if you want to better understand choices and tradeoffs in modern webstacks, in particular from a django perspective.
 
 SaaS Pegasus is a pretty good starting point for a django project that will come out of the box configured with many things you otherwise might have to set up manually. For example user management, different frontend options and backend options can be configured out of the box with reasonable choices and example code ready for use.
 
-However some finer points regarding configuration choices are a bit hidden in the docs and additionally I prefer to use a bit of a different setup in some details. So here are my notes for exactly that purpose.
+However some finer points regarding configuration choices are a bit hidden in the docs and additionally I prefer to use a bit of a different setup in some details (python poetry). For example the pegasus docs don't cover setting up your environment (nvm, npm, python, ...) in depth. These 'small' things can easily send an unexperienced dev down a rabbit hole of 'use npm to add npm to your project', resulting in hours of research, while actually a clean, well compartmentalized setup can be done in 20 minutes. So here are my notes for exactly that purpose.
 
 So these notes are most likely only useful for you, if you have bought access to SaaS Pegasus and want to, for example use `python poetry` to manage the environment instead of `venv` which is covered in the official docs.
 
@@ -29,12 +29,16 @@ Here I go into some consequences for the available options and explain alternati
 There are a couple of setting that are not very obvious in their consequences:
 
 Option `Example pages`
-: Pulling in example pages results in a much larger code base. If you just want to inspect them, it's better to look at them in a separate project.
+: Pulling in example pages results in a much larger code base. If you just want to inspect them, it's better to look at them in a separate project. The same goes for the "team" example pages. As far as team example code is concerned there are two public github repositories showing different approaches (<https://github.com/pcherna/pegasus-example-apps> and newer <https://github.com/pcherna/pegasus-example-apps-v2>).
 
 Option `Include static files`
 : This pulls in static css  and js files of the chosen frontend framework as opposed to pulling in only the sass files and generate the css on-the-fly. If changes to css via sass are planned, then it's better to leave this unchecked and follow the instructions in the docs under <https://docs.saaspegasus.com/front-end/>. This will require setting up npm and running the webpack compiler whenever the css changes. The same goes for `webpack`: if the static files are included there is no webpack setup, for example if you want to include your own javascript.
 
 ### git / github
+
+For current versions, the code can be added to github directly - prepare code, create repo and push it.
+
+#### versions prior to 2024.2.2
 
 Configure and download project, unpack and run:
 
@@ -82,11 +86,15 @@ So if we want to use the minimal, generic dependencies, we just run `poetry add`
 To run `poetry add` on each line use the following commands. `grep` excludes links to constraints and `sed` drops comments.
 
 ```bash
-cat requirements/dev-requirements.in | grep -v '\-c '| sed 's/\s#.*//' | xargs poetry add --group dev
+cat requirements/requirements.in | grep -v '\-c ' | sed 's/\s#.*//' | xargs poetry add
 ```
 
 ```bash
-cat requirements/requirements.in | grep -v '\-c ' | sed 's/\s#.*//' | xargs poetry add
+cat requirements/dev-requirements.in | grep -v '\-c '| sed 's/\s#.*//' | xargs poetry add --group development
+```
+
+```bash
+cat requirements/prod-requirements.in | grep -v '\-c '| sed 's/\s#.*//' | xargs poetry add --group production
 ```
 
 Lastly, to select the correct virtual environment in visual studio code, select `Python: Select Interpreter` from the command palette (Shift-Ctrl-P) and pick `./.venv` from the list.
@@ -108,7 +116,9 @@ The next step is to set up a javascript environment for the project. That works 
 
 The [pegasus docs](https://docs.saaspegasus.com/front-end/#prerequisites-to-building-the-front-end) mention `nvm`, the `npm` version manager (similar to `virtualenv`) but don't go into details.
 
-`nvm` installation is described in detail on [this github webseite](https://github.com/nvm-sh/nvm) - the gist is to install `nvm` on the user level and switch `npm` versions on the go, depending on the directory one works in. To this end, the `nvm` installer script appends some lines to the `.bashrc` file.
+`nvm` installation is described in detail on [this github website](https://github.com/nvm-sh/nvm) - the gist is to install `nvm` on the user level and switch `npm` versions on the go, depending on the directory one works in. To this end, the `nvm` installer script appends some lines to the `.bashrc` file.
+
+The official policy for nvm-updates seems to be to just install the latest version over the existing directly from the proper git tag:
 
 ```bash
 cd ~/
@@ -116,16 +126,16 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source .bashrc
 ```
 
-After installation of `nvm` any instructions recommending running `npm` as root should instead be run as user.
+After installation of `nvm` any instructions in the pegasus docs recommending running `npm` as root, should instead be run as user.
 
-How to use `nvm` is covered in the [Usage section of the official docs](https://github.com/nvm-sh/nvm#usage), but basically you can then install the latest version of node:
+How to use `nvm` is covered in the [Usage section of the official docs](https://github.com/nvm-sh/nvm#usage), but basically you can then install the latest version of node (you can do this from the project directory, npm will be installed on user level (not project level)):
 
 ```bash
 nvm install node
-which nvm  # will point to ~/.nvm/versions/...
+which npm  # will point to ~/.nvm/versions/...
 ```
 
-Once this is done, change into the project directory and run
+Once this is done, change _into the project directory_ and run
 
 ```bash
 npm install
@@ -134,6 +144,10 @@ npm install
 This will read the included `package.json` file and install the javascript packages configured there.
 
 Then you can proceed to build the javascript (and css) bundles using webpack via the preconfigure command `npm run dev` or `npm run dev-watch`. To build for production, run `npm run build`.
+
+#### customized javascript (optional)
+
+[Skip this if you don't need to inject you custom javascript at this point.]
 
 To configure the webpack build system look at the section [Long-term best practicse](https://docs.saaspegasus.com/front-end/#long-term-best-practices) of the pegasus front-end docs. This includes instructions on how the set up own javascript code, compile per-page etc.
 
@@ -164,7 +178,9 @@ The output js files need to be loaded on the respective html pages:
 {% endraw %}
 ```
 
-### Passing data from django to javascript
+#### Passing data from django to javascript (optional)
+
+[Skip this if you don't need to inject you custom javascript at this point.]
 
 This can be done either directly via django templates or via api calls. The first option is great for small amounts of data that is directly available in a django model, the second option is better for larger data sets (e.g. graphs) that can be fetched asynchronously from an api.
 
@@ -222,11 +238,11 @@ Pegasus uses sass via `webpack` (see previous chapter) and additionally splits t
 
 To override bootstrap styles, edit `assets/styles/site-bootstrap.scss` according to the bootstrap docs. Edits will only apply if you run `npm run dev` (`dev-watch`).
 
-If you change any bootstrap scss variables, you need to do so before the boostrap css files are included or they will have no effect. Bootstrap class overrides go into the file after bootsrap code is included.
+If you change any bootstrap scss variables, you need to do so before the bootstrap css files are included or they will have no effect. Bootstrap class overrides go into the file after bootstrap code is included.
 
 ### User setup
 
-Start a first user by starting the server `django runserver` (see below how to set up the `django`-shortcut) and going through the registration process. Then elevate the user to superuser with the script supplied by pegasus: `django promote_user_to_superuser yourname@example.com`. After that, you can log in and access `http://localhost:8000/admin`.
+Start a first user by starting the server `django runserver` (see below how to set up the `django`-shortcut) and going through the registration process (<http://localhost:8000>). If you receive an error about some python modules not found, make sure to activate the poetry environment `poetry shell` - you also need to run `django migrate`. Then elevate the user to superuser with the script supplied by pegasus: `django promote_user_to_superuser yourname@example.com`. After that, you can log in and access `http://localhost:8000/admin`.
 
 ## Add a custom app
 
@@ -235,6 +251,14 @@ Pegasus organizes all apps in the `apps` directory. To add an app there specify 
 ```bash
 mkdir apps/projects
 django startapp projects apps/projects
+```
+
+By default django will add the app name in `apps/projects/apps.py` as `projects` - this needs to be changed to `app.projects`:
+
+```python
+class TrackersConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "projects"  # <-- change to "apps.projects"
 ```
 
 The broad next steps are then:
